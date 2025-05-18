@@ -1,0 +1,25 @@
+@use "variables";
+
+@use "../node_modules/bulma/sass" with (
+  $family-primary: '"SUSE", sans-serif',
+  $primary: hsl(259, 86%, 61%),
+  $link: hsl(259, 100%, 45%),
+    $info: hsl(207, 90%, 64%),
+    $success: hsl(141, 53%, 53%),
+    $warning: hsl(48, 100%, 67%),
+    $danger: hsl(348, 86%, 61%),
+  $body-background-color: #FFFFFF,
+
+  $title-color: variables.$black,
+  $box-background-color: variables.$grey,
+  $box-color: #2B2B2B,
+  $box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+  $menu-label-color: variables.$black,
+  $menu-label-font-size: 0.8em,
+
+  $panel-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+);
+
+
+
+@import url("https://fonts.googleapis.com/css2?family=SUSE:wght@100..800&display=swap");
