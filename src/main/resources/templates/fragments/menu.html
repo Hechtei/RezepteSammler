@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="/main.js"></script>
+</head>
+<body>
+
+<aside th:fragment="menu" class="column aside has-background-grey-lighter">
+    <nav class="menu aside">
+        <div class="ml-5 mt-3">
+            <p class="menu-label">
+                General
+            </p>
+            <ul class="menu-list">
+                <li><a href="/" class="has-text-black has-background-grey-lighter">Dashboard</a></li>
+                <li><a href="/recipe" class="has-text-black has-background-grey-lighter">Rezept anlegen</a></li>
+                <li><a href="/datastorage" class="has-text-black has-background-grey-lighter">Rezeptübersicht</a></li>
+            </ul>
+            <p class="menu-label">
+                Konfiguration
+            </p>
+            <ul class="menu-list">
+                <li><a class="has-text-black has-background-grey-lighter">Rezeptverwaltung</a></li>
+            </ul>
+        </div>
+    </nav>
+</aside>
+
+
+
+</body>
+</html>
