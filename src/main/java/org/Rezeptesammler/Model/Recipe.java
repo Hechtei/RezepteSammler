@@ -8,9 +8,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
 
+import java.util.List;
+
 @Data
-@Getter
-@Setter
 public class Recipe {
 
     @Id
@@ -26,14 +26,36 @@ public class Recipe {
 
     private String thumbnail;
 
+    private List<String> ingredients;
 
-    public Recipe(String _id, String _rev, String name, String link, String caption, String thumbnail) {
+    private List<String> steps;
+
+
+    public Recipe(String _id, String _rev, String name, String link, String caption, String thumbnail, List<String> ingredients, List<String> steps) {
         this._id = _id;
         this._rev = _rev;
         this.name = name;
         this.link = link;
         this.caption = caption;
         this.thumbnail = thumbnail;
+        this.ingredients = ingredients;
+        this.steps = steps;
+    }
+
+    public List<String> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<String> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public List<String> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<String> steps) {
+        this.steps = steps;
     }
 
     public String getThumbnail() {

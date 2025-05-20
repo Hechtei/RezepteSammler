@@ -16,14 +16,11 @@ import java.util.UUID;
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
-    private static CouchDbClient dbClient = new CouchDbClient("couchdb_recipe.properties");
-
+    private static final CouchDbClient dbClient = new CouchDbClient("couchdb_recipe.properties");
     private static final String DOWNLOAD_DIR = "downloads";
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-
-    public List<Recipe> getAllRecipes(){
+    public List<Recipe> getAllRecipes() {
         return dbClient.view("Recipes/allRecipes").includeDocs(true).query(Recipe.class);
     }
 
@@ -33,34 +30,36 @@ public class RecipeServiceImpl implements RecipeService {
         if (!dir.exists()) dir.mkdirs();
 
         recipe.set_id(UUID.randomUUID().toString());
-        // Rezept-ID als Basis für den Dateinamen
         String baseFilename = recipe.get_id();
 
-        // yt-dlp mit festem Dateinamen
-        ProcessBuilder pb = new ProcessBuilder(
+        // yt-dlp Download
+        System.out.println("▶ Starte yt-dlp Download...");
+        ProcessBuilder ytDlpPb = new ProcessBuilder(
                 "yt-dlp",
                 "-P", DOWNLOAD_DIR,
                 "--write-info-json",
                 "--write-thumbnail",
-                "-o", baseFilename,  // Dateiname ohne Erweiterung, yt-dlp hängt automatisch Endungen an
+                "-o", baseFilename,
                 recipe.getLink()
         );
+        ytDlpPb.redirectErrorStream(true);
+        Process ytDlpProcess = ytDlpPb.start();
 
-        pb.redirectErrorStream(true);
-        Process process = pb.start();
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line);
+        try (BufferedReader ytOut = new BufferedReader(new InputStreamReader(ytDlpProcess.getInputStream()))) {
+            String line;
+            while ((line = ytOut.readLine()) != null) {
+                System.out.println("[yt-dlp] " + line);
+            }
         }
 
-        int exitCode = process.waitFor();
-        if (exitCode != 0) {
-            throw new RuntimeException("yt-dlp fehlgeschlagen mit Code: " + exitCode);
+        int ytExitCode = ytDlpProcess.waitFor();
+        System.out.println("yt-dlp beendet mit Code: " + ytExitCode);
+
+        if (ytExitCode != 0) {
+            throw new RuntimeException("yt-dlp fehlgeschlagen mit Code: " + ytExitCode);
         }
 
-        // Jetzt die Info-JSON Datei mit dem Rezept-ID-Namen laden
+        // Beschreibung aus JSON lesen
         File jsonFile = new File(DOWNLOAD_DIR, baseFilename + ".info.json");
 
         if (jsonFile.exists()) {
@@ -68,15 +67,54 @@ public class RecipeServiceImpl implements RecipeService {
             String description = root.path("description").asText(null);
             if (description != null) {
                 recipe.setCaption(description);
+
+                // Prompt für Ollama
+                String prompt = "Extrahiere aus dem folgenden Text das Rezept. Gib das Ergebnis als JSON mit zwei Feldern zurück: " +
+                        "\"ingredients\" und \"steps\".\n\nText:\n" + description;
+
+                System.out.println("▶ Starte Ollama Anfrage...");
+
+                ProcessBuilder ollamaPb = new ProcessBuilder(
+                        "C:\\Users\\hecht\\AppData\\Local\\Programs\\Ollama\\ollama.exe",
+                        "run", "llama3.2", prompt
+                );
+                ollamaPb.redirectErrorStream(true);
+                Process ollamaProcess = ollamaPb.start();
+
+                StringBuilder ollamaOutput = new StringBuilder();
+                try (BufferedReader ollamaReader = new BufferedReader(new InputStreamReader(ollamaProcess.getInputStream()))) {
+                    String line;
+                    while ((line = ollamaReader.readLine()) != null) {
+                        System.out.println("[Ollama] " + line); // Live-Ausgabe
+                        ollamaOutput.append(line).append("\n");
+                    }
+                }
+
+                int ollamaExitCode = ollamaProcess.waitFor();
+                System.out.println("Ollama beendet mit Code: " + ollamaExitCode);
+
+                if (ollamaExitCode == 0) {
+                    try {
+                        JsonNode recipeJson = objectMapper.readTree(ollamaOutput.toString());
+                        recipe.setIngredients(objectMapper.convertValue(recipeJson.get("ingredients"), List.class));
+                        recipe.setSteps(objectMapper.convertValue(recipeJson.get("steps"), List.class));
+                    } catch (Exception e) {
+                        System.err.println("❌ Fehler beim Parsen der Ollama-Antwort: " + e.getMessage());
+                    }
+                } else {
+                    System.err.println("❌ Ollama Prozess fehlgeschlagen mit Code: " + ollamaExitCode);
+                }
             }
         }
 
+        // Thumbnail setzen, falls vorhanden
         File thumbnail = new File(DOWNLOAD_DIR, baseFilename + ".jpg");
-        if(thumbnail.exists()){
-            recipe.setThumbnail(thumbnail.getAbsolutePath());
+        if (thumbnail.exists()) {
+            recipe.setThumbnail("/downloads/" + baseFilename + ".jpg");
         }
 
+        // Speichern in CouchDB
         dbClient.save(recipe);
+        System.out.println("✅ Rezept gespeichert: " + recipe.get_id());
     }
-
 }

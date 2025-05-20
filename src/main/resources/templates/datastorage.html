@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Datastorage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="/main.js"></script>
+</head>
+<body>
+
+
+
+<div th:insert="~{fragments/header.html ::header }"></div>
+
+<div class="columns is-fullheight">
+    <div th:insert="~{fragments/menu.html ::menu }"></div>
+    <main class="column m-4">
+
+        <div class="level mb-5">
+            <div class="level-left">
+                <div class="level-item">
+                    <div class="title">Rezeptübersicht</div>
+                </div>
+            </div>
+            <div class="level-right">
+                <div class="level-item">
+                    <button type="button" class="button is-small is-info is-light">
+                        <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+                        <span>Datum</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="columns is-multiline is-variable is-4">
+            <div class="column is-12-mobile is-6-tablet is-3-desktop" th:each="recipe : ${recipes}">
+                <div class="card recipe-card">
+                    <div class="card-image">
+                        <figure>
+                            <img th:src="@{${recipe.thumbnail}}" alt="Rezeptbild">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <p class="title is-5 has-text-white" th:text="${recipe.name}">Rezeptname</p>
+                    </div>
+                    <footer class="card-footer">
+                        <a th:href="@{/rezepte/{id}(id=${recipe._id})}" class="card-footer-item">Details</a>
+                        <a href="#" class="card-footer-item">Speichern</a>
+                    </footer>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+</div>
+
+
+
+
+
+
+</body>
+</html>
