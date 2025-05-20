@@ -47,8 +47,7 @@
                         <p class="title is-5 has-text-white" th:text="${recipe.name}">Rezeptname</p>
                     </div>
                     <footer class="card-footer">
-                        <a th:href="@{/rezepte/{id}(id=${recipe._id})}" class="card-footer-item">Details</a>
-                        <a href="#" class="card-footer-item">Speichern</a>
+                        <a th:href="@{/recipe/{id}(id=${recipe._id})}" class="card-footer-item">Details</a>
                     </footer>
                 </div>
             </div>

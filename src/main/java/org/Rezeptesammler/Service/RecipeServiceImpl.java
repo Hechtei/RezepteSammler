@@ -23,9 +23,7 @@ public class RecipeServiceImpl implements RecipeService {
     private static final String DOWNLOAD_DIR = "downloads";
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public List<Recipe> getAllRecipes() {
-        return dbClient.view("Recipes/allRecipes").includeDocs(true).query(Recipe.class);
-    }
+
 
     @Override
     public void saveRecipe(Recipe recipe) throws IOException, InterruptedException {

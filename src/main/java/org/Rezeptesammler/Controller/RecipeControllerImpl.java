@@ -1,14 +1,12 @@
 package org.Rezeptesammler.Controller;
 
 import org.Rezeptesammler.Model.Recipe;
+import org.Rezeptesammler.Service.CouchDBService;
 import org.Rezeptesammler.Service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -19,11 +17,21 @@ public class RecipeControllerImpl implements RecipeController{
     @Autowired
     RecipeService recipeService;
 
+    @Autowired
+    CouchDBService couchDBService;
+
     @GetMapping("/recipe")
     public String getRecipe(Model model){
 
         return "recipe.html";
     }
+
+    @GetMapping("/recipe/{id}")
+    public String getRecipe(@PathVariable("id") String id, Model model) {
+        model.addAttribute("recipe", couchDBService.getRecipeBy_Id(id));
+        return "getRecipe.html";
+    }
+
 
     @Override
     @PostMapping("/recipe/save")

@@ -1,5 +1,6 @@
 package org.Rezeptesammler.Controller;
 
+import org.Rezeptesammler.Service.CouchDBService;
 import org.Rezeptesammler.Service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,9 @@ public class HomeControllerImpl implements HomeController{
     @Autowired
     RecipeService recipeService;
 
+    @Autowired
+    CouchDBService couchDBService;
+
     @Override
     @GetMapping("/")
     public String getHome(Model model) {
@@ -22,7 +26,7 @@ public class HomeControllerImpl implements HomeController{
     @GetMapping("/datastorage")
     public String getDatastorage(Model model){
 
-        model.addAttribute("recipes",recipeService.getAllRecipes());
+        model.addAttribute("recipes",couchDBService.getAllRecipes());
 
         return "datastorage.html";
     }

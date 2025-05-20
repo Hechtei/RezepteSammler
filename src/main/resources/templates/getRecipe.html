@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Recipe</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="/main.js"></script>
+</head>
+<body>
+
+
+
+<div th:insert="~{fragments/header.html ::header }"></div>
+
+<div class="columns is-fullheight">
+  <div th:insert="~{fragments/menu.html ::menu }"></div>
+  <main class="column m-4">
+    <!-- Dashboard Header -->
+    <div class="level mb-5">
+      <div class="level-left">
+        <div class="level-item">
+          <div class="title">Rezept Details</div>
+        </div>
+      </div>
+
+      <div class="level-right">
+        <div class="level-item">
+          <button type="button" class="button is-small is-info is-light">
+            <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+            <span>Datum</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rezeptname -->
+    <h2 class="title is-4" th:text="${recipe.name}">Rezeptname</h2>
+
+    <!-- Hauptinhalt: Bild + Infos -->
+    <div class="columns">
+      <!-- Thumbnail-Bild -->
+      <div class="column is-one-third card-image">
+        <figure>
+          <img th:src="@{${recipe.thumbnail}}" alt="Rezeptbild">
+        </figure>
+      </div>
+
+      <!-- Zutaten & Schritte -->
+      <div class="column">
+        <div class="columns is-multiline">
+          <!-- Zutaten -->
+          <div class="column is-12">
+            <div class="box">
+              <h3 class="title is-5">🧂 Zutaten</h3>
+              <ul>
+                <li th:each="ingredient : ${recipe.ingredients}"
+                    th:text="${ingredient}">Zutat</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Schritte -->
+          <div class="column is-12">
+            <div class="box">
+              <h3 class="title is-5">👨‍🍳 Schritte</h3>
+              <ol>
+                <li th:each="step : ${recipe.steps}"
+                    th:text="${step}">Schritt</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+</body>
+</html>

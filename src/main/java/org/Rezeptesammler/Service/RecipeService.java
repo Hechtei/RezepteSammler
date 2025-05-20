@@ -9,5 +9,5 @@ public interface RecipeService {
 
     public void saveRecipe(Recipe recipe) throws IOException, InterruptedException;
 
-    public List<Recipe> getAllRecipes();
+
 }
