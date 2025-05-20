@@ -2,14 +2,17 @@ package org.Rezeptesammler.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.Rezeptesammler.Model.Recipe;
 import org.lightcouch.CouchDbClient;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.UUID;
 
@@ -69,40 +72,76 @@ public class RecipeServiceImpl implements RecipeService {
                 recipe.setCaption(description);
 
                 // Prompt für Ollama
-                String prompt = "Extrahiere aus dem folgenden Text das Rezept. Gib das Ergebnis als JSON mit zwei Feldern zurück: " +
-                        "\"ingredients\" und \"steps\".\n\nText:\n" + description;
+                String prompt = "Extrahiere aus dem folgenden Text ein Rezept mit Zutaten und Schritten. " +
+                        "Gib das Ergebnis als JSON-Objekt zurück, z. B.: {\"ingredients\": [\"...\"], \"steps\": [\"...\"]}.\n\nText:\n" + description;
 
-                System.out.println("▶ Starte Ollama Anfrage...");
+                System.out.println("▶ Sende Anfrage an Ollama HTTP API...");
 
-                ProcessBuilder ollamaPb = new ProcessBuilder(
-                        "C:\\Users\\hecht\\AppData\\Local\\Programs\\Ollama\\ollama.exe",
-                        "run", "llama3.2", prompt
-                );
-                ollamaPb.redirectErrorStream(true);
-                Process ollamaProcess = ollamaPb.start();
+                HttpClient client = HttpClient.newHttpClient();
 
-                StringBuilder ollamaOutput = new StringBuilder();
-                try (BufferedReader ollamaReader = new BufferedReader(new InputStreamReader(ollamaProcess.getInputStream()))) {
-                    String line;
-                    while ((line = ollamaReader.readLine()) != null) {
-                        System.out.println("[Ollama] " + line); // Live-Ausgabe
-                        ollamaOutput.append(line).append("\n");
-                    }
-                }
+                // JSON Request Body für Ollama HTTP API
+                ObjectNode requestJson = objectMapper.createObjectNode();
+                requestJson.put("model", "llama3.2");
+                requestJson.put("stream", false);
 
-                int ollamaExitCode = ollamaProcess.waitFor();
-                System.out.println("Ollama beendet mit Code: " + ollamaExitCode);
+                // message
+                ArrayNode messages = objectMapper.createArrayNode();
+                ObjectNode userMessage = objectMapper.createObjectNode();
+                userMessage.put("role", "user");
+                userMessage.put("content", prompt);
+                messages.add(userMessage);
+                requestJson.set("messages", messages);
 
-                if (ollamaExitCode == 0) {
+                // format schema
+                ObjectNode format = objectMapper.createObjectNode();
+                format.put("type", "object");
+
+                ObjectNode properties = objectMapper.createObjectNode();
+                ObjectNode ingredientsProp = objectMapper.createObjectNode();
+                ingredientsProp.put("type", "array");
+                ingredientsProp.set("items", objectMapper.createObjectNode().put("type", "string"));
+                properties.set("ingredients", ingredientsProp);
+
+                ObjectNode stepsProp = objectMapper.createObjectNode();
+                stepsProp.put("type", "array");
+                stepsProp.set("items", objectMapper.createObjectNode().put("type", "string"));
+                properties.set("steps", stepsProp);
+
+                format.set("properties", properties);
+                ArrayNode required = objectMapper.createArrayNode();
+                required.add("ingredients");
+                required.add("steps");
+                format.set("required", required);
+
+                requestJson.set("format", format);
+
+                // HTTP Request senden
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create("http://localhost:11434/api/chat"))
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(requestJson.toString()))
+                        .build();
+
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200) {
+                    String responseBody = removeControlChars(response.body());
+                    System.out.println("✔ Ollama Response: " + responseBody);
+
                     try {
-                        JsonNode recipeJson = objectMapper.readTree(ollamaOutput.toString());
+                        JsonNode ollamaJson = objectMapper.readTree(responseBody);
+                        String content = ollamaJson.get("message").get("content").asText();
+
+                        JsonNode recipeJson = objectMapper.readTree(content);
                         recipe.setIngredients(objectMapper.convertValue(recipeJson.get("ingredients"), List.class));
                         recipe.setSteps(objectMapper.convertValue(recipeJson.get("steps"), List.class));
                     } catch (Exception e) {
                         System.err.println("❌ Fehler beim Parsen der Ollama-Antwort: " + e.getMessage());
                     }
+
                 } else {
-                    System.err.println("❌ Ollama Prozess fehlgeschlagen mit Code: " + ollamaExitCode);
+                    System.err.println("❌ Ollama API fehlgeschlagen mit Status: " + response.statusCode());
+                    System.err.println(response.body());
                 }
             }
         }
@@ -116,5 +155,9 @@ public class RecipeServiceImpl implements RecipeService {
         // Speichern in CouchDB
         dbClient.save(recipe);
         System.out.println("✅ Rezept gespeichert: " + recipe.get_id());
+    }
+
+    private static String removeControlChars(String input) {
+        return input.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
     }
 }
