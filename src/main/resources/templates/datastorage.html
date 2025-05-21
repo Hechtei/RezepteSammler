@@ -37,18 +37,31 @@
 
         <div class="columns is-multiline is-variable is-4">
             <div class="column is-12-mobile is-6-tablet is-3-desktop" th:each="recipe : ${recipes}">
-                <div class="card recipe-card">
+                <div class="card card recipe-card">
                     <div class="card-image">
-                        <figure>
+                        <figure class="image is-4by3">
                             <img th:src="@{${recipe.thumbnail}}" alt="Rezeptbild">
                         </figure>
                     </div>
                     <div class="card-content">
-                        <p class="title is-5 has-text-white" th:text="${recipe.name}">Rezeptname</p>
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-4 has-text-white" th:text="${recipe.name}">Spaghetti Carbonara</p>
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            <p th:text="${recipe.summary}">summary</p>
+                            <br>
+                            <span class="tag is-info is-light mt-1" th:text="${recipe.category}">Nicht vegetarisch</span>
+                            <span class="tag is-warning is-light mt-1">Einfach</span>
+                            <span class="tag is-success is-light mt-1">30 Min</span>
+                            <br><br>
+                            <footer class="card-footer">
+                                <a th:href="@{/recipe/{id}(id=${recipe._id})}" class="card-footer-item">Zum Rezept</a>
+                            </footer>
+                        </div>
                     </div>
-                    <footer class="card-footer">
-                        <a th:href="@{/recipe/{id}(id=${recipe._id})}" class="card-footer-item">Details</a>
-                    </footer>
                 </div>
             </div>
         </div>

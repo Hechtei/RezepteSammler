@@ -34,7 +34,121 @@
             </div>
         </div>
 
+        <!-- Statistiken -->
+        <div class="columns is-multiline">
+            <div class="column is-3">
+                <div class="box has-text-centered">
+                    <p class="heading">Rezepte insgesamt</p>
+                    <p class="title" th:text="${allRecipes}">0</p>
+                </div>
+            </div>
+            <div class="column is-3">
+                <div class="box has-text-centered">
+                    <p class="heading">Vegetarisch</p>
+                    <p class="title">45</p>
+                </div>
+            </div>
+            <div class="column is-3">
+                <div class="box has-text-centered">
+                    <p class="heading">Vegan</p>
+                    <p class="title">20</p>
+                </div>
+            </div>
+            <div class="column is-3">
+                <div class="box has-text-centered">
+                    <p class="heading">Favoriten</p>
+                    <p class="title">18</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="columns is-multiline">
+        <!-- Zufälliger Rezeptvorschlag -->
+            <div class="column is-3">
+        <div class="box">
+            <h2 class="title is-4 mb-4">Zufälliger Rezeptvorschlag</h2>
+            <div class="card card recipe-card" th:if="${recipe != null}">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img th:src="@{${recipe.thumbnail}}" alt="Rezeptbild">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <p class="title is-4 has-text-white" th:text="${recipe.name}">Spaghetti Carbonara</p>
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        <p th:text="${recipe.summary}">summary</p>
+                        <br>
+                        <span class="tag is-info is-light mt-1" th:text="${recipe.category}">Nicht vegetarisch</span>
+                        <span class="tag is-warning is-light mt-1">Einfach</span>
+                        <span class="tag is-success is-light mt-1">30 Min</span>
+                        <br><br>
+                        <a href="#" class="button is-link is-small mt-2">
+                            <span class="icon"><i class="fas fa-utensils"></i></span>
+                            <span>Zum Rezept</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${recipe == null}">
+                <p>Noch kein Rezept vorhanden</p>
+            </div>
+        </div>
+            </div>
+
+        <!-- Weitere Aktionen -->
+            <div class="column">
+        <div class="box">
+            <div class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <h2 class="title is-4">Letzte Aktivitäten</h2>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <button class="button is-primary is-small">
+                            <span class="icon"><i class="fas fa-plus"></i></span>
+                            <span>Neues Rezept</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <table class="table is-fullwidth is-hoverable">
+                <thead>
+                <tr>
+                    <th>Rezept</th>
+                    <th>Kategorie</th>
+                    <th>Zuletzt geändert</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Chili sin Carne</td>
+                    <td>Vegan</td>
+                    <td>20. Mai 2025</td>
+                </tr>
+                <tr>
+                    <td>Käsespätzle</td>
+                    <td>Vegetarisch</td>
+                    <td>18. Mai 2025</td>
+                </tr>
+                <tr>
+                    <td>Lasagne</td>
+                    <td>Fleisch</td>
+                    <td>15. Mai 2025</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+            </div>
+        </div>
     </main>
+
 </div>
 
 

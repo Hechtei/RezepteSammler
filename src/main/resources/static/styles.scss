@@ -11,6 +11,7 @@
   $body-background-color: #FFFFFF,
 
   $title-color: variables.$black,
+  $subtitle-color: variables.$black,
   $box-background-color: variables.$grey,
   $box-color: #2B2B2B,
   $box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
@@ -19,7 +20,6 @@
 
   $panel-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
 );
-
 @use "aside";
 @use "card";
 

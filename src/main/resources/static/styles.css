@@ -5327,7 +5327,7 @@ button.tag:active,
   --bulma-title-strong-weight: inherit;
   --bulma-title-sub-size: 0.75em;
   --bulma-title-sup-size: 0.75em;
-  --bulma-subtitle-color: var(--bulma-text);
+  --bulma-subtitle-color: #000000;
   --bulma-subtitle-family: false;
   --bulma-subtitle-size: var(--bulma-size-5);
   --bulma-subtitle-weight: var(--bulma-weight-normal);
@@ -21557,6 +21557,12 @@ aside.aside {
   width: 400px;
   background-color: #EDEDED;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.has-text-wrap {
+  overflow-wrap: break-word; /* Bricht lange Wörter */
+  word-break: break-word;
+  white-space: pre-line; /* Beachtet Zeilenumbrüche (\n) aus dem Text */
 }
 
 .recipe-card {

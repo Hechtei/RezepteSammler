@@ -23,8 +23,6 @@ public class RecipeServiceImpl implements RecipeService {
     private static final String DOWNLOAD_DIR = "downloads";
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-
-
     @Override
     public void saveRecipe(Recipe recipe) throws IOException, InterruptedException {
         File dir = new File(DOWNLOAD_DIR);
@@ -69,9 +67,18 @@ public class RecipeServiceImpl implements RecipeService {
             if (description != null) {
                 recipe.setCaption(description);
 
-                // Prompt für Ollama
-                String prompt = "Extrahiere aus dem folgenden Text ein Rezept mit Zutaten und Schritten. " +
-                        "Gib das Ergebnis als JSON-Objekt zurück, z. B.: {\"ingredients\": [\"...\"], \"steps\": [\"...\"]}.\n\nText:\n" + description;
+                // Prompt aus Datei lesen
+                String promptTemplate;
+                try (BufferedReader br = new BufferedReader(new FileReader("src/main/java/org/Rezeptesammler/Service/prompt.txt"))) {
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line).append("\n");
+                    }
+                    promptTemplate = sb.toString();
+                }
+
+                String prompt = promptTemplate + description;
 
                 System.out.println("▶ Sende Anfrage an Ollama HTTP API...");
 
@@ -95,20 +102,36 @@ public class RecipeServiceImpl implements RecipeService {
                 format.put("type", "object");
 
                 ObjectNode properties = objectMapper.createObjectNode();
+
+                // ingredients
                 ObjectNode ingredientsProp = objectMapper.createObjectNode();
                 ingredientsProp.put("type", "array");
                 ingredientsProp.set("items", objectMapper.createObjectNode().put("type", "string"));
                 properties.set("ingredients", ingredientsProp);
 
+                // steps
                 ObjectNode stepsProp = objectMapper.createObjectNode();
                 stepsProp.put("type", "array");
                 stepsProp.set("items", objectMapper.createObjectNode().put("type", "string"));
                 properties.set("steps", stepsProp);
 
+                // summary
+                ObjectNode summaryProp = objectMapper.createObjectNode();
+                summaryProp.put("type", "string");
+                properties.set("summary", summaryProp);
+
+                // category
+                ObjectNode categoryProp = objectMapper.createObjectNode();
+                categoryProp.put("type", "string");
+                properties.set("category", categoryProp);
+
                 format.set("properties", properties);
+
                 ArrayNode required = objectMapper.createArrayNode();
                 required.add("ingredients");
                 required.add("steps");
+                required.add("summary");
+                required.add("category");
                 format.set("required", required);
 
                 requestJson.set("format", format);
@@ -133,6 +156,8 @@ public class RecipeServiceImpl implements RecipeService {
                         JsonNode recipeJson = objectMapper.readTree(content);
                         recipe.setIngredients(objectMapper.convertValue(recipeJson.get("ingredients"), List.class));
                         recipe.setSteps(objectMapper.convertValue(recipeJson.get("steps"), List.class));
+                        recipe.setSummary(recipeJson.get("summary").asText());
+                        recipe.setCategory(recipeJson.get("category").asText());
                     } catch (Exception e) {
                         System.err.println("❌ Fehler beim Parsen der Ollama-Antwort: " + e.getMessage());
                     }

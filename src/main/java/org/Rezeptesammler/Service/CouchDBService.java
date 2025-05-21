@@ -8,7 +8,9 @@ public interface CouchDBService {
 
     public List<Recipe> getAllRecipes();
 
+    public int countAllRecipes();
+
     public Recipe getRecipeBy_Id(String _id);
 
-
+    public Recipe getRandomRecipe();
 }

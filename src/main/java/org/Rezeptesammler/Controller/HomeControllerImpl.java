@@ -20,6 +20,9 @@ public class HomeControllerImpl implements HomeController{
     @GetMapping("/")
     public String getHome(Model model) {
 
+        model.addAttribute("recipe", couchDBService.getRandomRecipe());
+        model.addAttribute("allRecipes",couchDBService.countAllRecipes());
+
         return "index.html";
     }
 

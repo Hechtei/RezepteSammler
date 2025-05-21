@@ -1,3 +1,10 @@
+.has-text-wrap {
+  overflow-wrap: break-word; /* Bricht lange Wörter */
+  word-break: break-word;
+  white-space: pre-line; /* Beachtet Zeilenumbrüche (\n) aus dem Text */
+}
+
+
 .recipe-card {
   max-width: 300px; // Etwas größer als vorher
   margin: auto;

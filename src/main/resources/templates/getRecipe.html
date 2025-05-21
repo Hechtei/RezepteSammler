@@ -42,11 +42,12 @@
     <div class="columns">
       <!-- Thumbnail-Bild -->
       <div class="column is-one-third card-image">
+        <div class="box">
         <figure>
           <img th:src="@{${recipe.thumbnail}}" alt="Rezeptbild">
         </figure>
+        </div>
       </div>
-
       <!-- Zutaten & Schritte -->
       <div class="column">
         <div class="columns is-multiline">
@@ -62,15 +63,19 @@
           </div>
 
           <!-- Schritte -->
+          <!-- Schritte -->
           <div class="column is-12">
-            <div class="box">
-              <h3 class="title is-5">👨‍🍳 Schritte</h3>
-              <ol>
-                <li th:each="step : ${recipe.steps}"
-                    th:text="${step}">Schritt</li>
+            <div class="box p-5 has-text-left">
+              <h3 class="title is-5 mb-4">👨‍🍳 Schritte</h3>
+              <ol class="content">
+                <li class="mb-3 ml-2 has-text-wrapped" th:each="step : ${recipe.steps}" th:text="${step}">
+                  Schritt
+                </li>
+
               </ol>
             </div>
           </div>
+
         </div>
       </div>
     </div>

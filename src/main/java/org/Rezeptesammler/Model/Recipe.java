@@ -26,20 +26,64 @@ public class Recipe {
 
     private String thumbnail;
 
+    private String category;
+
+    private String difficulty;
+
+    private String duration;
+
+    private String summary;
+
     private List<String> ingredients;
 
     private List<String> steps;
 
 
-    public Recipe(String _id, String _rev, String name, String link, String caption, String thumbnail, List<String> ingredients, List<String> steps) {
+    public Recipe(String _id, String _rev, String name, String link, String caption, String thumbnail, String category, String difficulty, String duration, String summary, List<String> ingredients, List<String> steps) {
         this._id = _id;
         this._rev = _rev;
         this.name = name;
         this.link = link;
         this.caption = caption;
         this.thumbnail = thumbnail;
+        this.category = category;
+        this.difficulty = difficulty;
+        this.duration = duration;
+        this.summary = summary;
         this.ingredients = ingredients;
         this.steps = steps;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public List<String> getIngredients() {

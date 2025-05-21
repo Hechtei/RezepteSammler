@@ -1,0 +1,5 @@
+Extrahiere aus dem folgenden Text ein Rezept mit Zutaten und Schritten.
+Darüber hinaus möchte ich die Category ob es vegetarisch, fleich oder vegan ist.
+Dazu kommt noch eine kurze summary.
+Gib das Ergebnis als JSON-Objekt zurück. Folgendes Muster bitte beachten:
+{\"summary\": \"...\",\"category\": \"...\",\"ingredients\": [\"...\"], \"steps\": [\"...\"]}.\n\nText:\n"
