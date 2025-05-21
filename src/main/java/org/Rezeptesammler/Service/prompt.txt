@@ -1,5 +1,8 @@
 Extrahiere aus dem folgenden Text ein Rezept mit Zutaten und Schritten.
-Darüber hinaus möchte ich die Category ob es vegetarisch, fleich oder vegan ist.
+Achte dabei bei den Schritten darauf, keine Nummern mitzugeben, aber die Reihenfolge zu beachten
+Darüber hinaus möchte ich die Category ob es Vegetarisch, Fleich oder Vegan ist. Stelle die Category anhand der Zutaten fest.
+Bitte schreibe die Category ganz aus, aber mit einem großem Anfangsbuchstaben.
 Dazu kommt noch eine kurze summary.
+Alles auf Deutsch.
 Gib das Ergebnis als JSON-Objekt zurück. Folgendes Muster bitte beachten:
 {\"summary\": \"...\",\"category\": \"...\",\"ingredients\": [\"...\"], \"steps\": [\"...\"]}.\n\nText:\n"

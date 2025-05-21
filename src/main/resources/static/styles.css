@@ -21554,7 +21554,7 @@ has-background-danger.is-hoverable:active {
 
 aside.aside {
   height: 100vh;
-  width: 400px;
+  width: 250px;
   background-color: #EDEDED;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
@@ -21566,14 +21566,21 @@ aside.aside {
 }
 
 .recipe-card {
-  max-width: 300px;
+  max-width: 340px; /* vorher 300px – leicht breiter */
   margin: auto;
   font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* weicher Schatten */
+  border-radius: 10px; /* Optional: abgerundete Ecken für schöneren Look */
+  transition: transform 0.2s ease-in-out;
+}
+.recipe-card:hover {
+  transform: translateY(-4px); /* Optional: leichte Hover-Animation */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Stärkerer Schatten beim Hover */
 }
 .recipe-card .card-image figure {
   aspect-ratio: 4/3;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 8px 8px 0 0;
   margin: 0;
 }
 .recipe-card .card-image figure img {

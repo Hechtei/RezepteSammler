@@ -10,6 +10,8 @@ public interface CouchDBService {
 
     public int countAllRecipes();
 
+    public int countVegiRecipes();
+
     public Recipe getRecipeBy_Id(String _id);
 
     public Recipe getRandomRecipe();

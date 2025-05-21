@@ -22,6 +22,7 @@ public class HomeControllerImpl implements HomeController{
 
         model.addAttribute("recipe", couchDBService.getRandomRecipe());
         model.addAttribute("allRecipes",couchDBService.countAllRecipes());
+        model.addAttribute("vegiRecipes",couchDBService.countVegiRecipes());
 
         return "index.html";
     }

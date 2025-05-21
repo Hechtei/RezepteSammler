@@ -24,9 +24,19 @@ public class CouchDBServiceImpl implements CouchDBService{
 
     public int countAllRecipes() {
             List<JsonObject> result = dbClient.view("Recipes/countAllRecipes").includeDocs(false).query(JsonObject.class);
-            return result.get(0).get("value").getAsInt();
+            if(!result.isEmpty()) {
+                return result.get(0).get("value").getAsInt();
+            }
+            return 0 ;
         }
 
+    public int countVegiRecipes() {
+            List<JsonObject> result = dbClient.view("Recipes/countVegiRecipes").includeDocs(false).query(JsonObject.class);
+        if(!result.isEmpty()) {
+            return result.get(0).get("value").getAsInt();
+        }
+        return 0 ;
+    }
 
 
 
