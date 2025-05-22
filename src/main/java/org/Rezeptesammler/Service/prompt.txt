@@ -1,4 +1,4 @@
-Extrahiere aus dem folgenden Text ein Rezept mit Zutaten und Schritten.
+Extrahiere aus dem folgenden Text ein Rezept mit Zutaten/Gewürze und Schritten.
 Achte dabei bei den Schritten darauf, keine Nummern mitzugeben, aber die Reihenfolge zu beachten
 Darüber hinaus möchte ich die Category ob es Vegetarisch, Fleich oder Vegan ist. Stelle die Category anhand der Zutaten fest.
 Bitte schreibe die Category ganz aus, aber mit einem großem Anfangsbuchstaben.

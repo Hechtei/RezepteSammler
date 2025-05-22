@@ -180,6 +180,34 @@ public class RecipeServiceImpl implements RecipeService {
         System.out.println("✅ Rezept gespeichert: " + recipe.get_id());
     }
 
+    @Override
+    public boolean delteRecipe(String id) {
+        // Lösche Dateien mit gleicher Basis-ID
+        String[] extensions = {".info.json", ".mp4", ".jpg"};
+        for (String ext : extensions) {
+            File file = new File(DOWNLOAD_DIR, id + ext);
+            if (file.exists()) {
+                if (file.delete()) {
+                    System.out.println("🗑 Datei gelöscht: " + file.getName());
+                } else {
+                    System.err.println("❌ Fehler beim Löschen von Datei: " + file.getName());
+                }
+            }
+        }
+        try {
+            dbClient.remove(dbClient.find(Recipe.class,id));
+            System.out.println("🗑 Rezept aus Datenbank gelöscht: " + id);
+            return true;
+        } catch (Exception e) {
+            System.err.println("❌ Fehler beim Löschen des Rezepts aus der Datenbank: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public void updateRecipe(Recipe recipe){
+        dbClient.update(recipe);
+    }
+
     private static String removeControlChars(String input) {
         return input.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
     }

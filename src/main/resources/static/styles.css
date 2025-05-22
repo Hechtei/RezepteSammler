@@ -21553,7 +21553,7 @@ has-background-danger.is-hoverable:active {
 }
 
 aside.aside {
-  height: 100vh;
+  height: 100%;
   width: 250px;
   background-color: #EDEDED;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);

@@ -5,28 +5,26 @@
     <title>Header</title>
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <script src="/main.js"></script>
 </head>
 <body>
 
 <div th:fragment="header">
     <header>
-        <nav class="navbar is-primary py-3" role="navigation" aria-label="main navigation">
+        <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
 
-            <div class="navbar-start">
-
-                <div class="navbar-brand">
-
-                </div>
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                    <img src="/logo.png" alt="Logo" style="max-height: 5rem;">
+                </a>
             </div>
 
-
             <div class="navbar-end">
-
+                <!-- optional content -->
             </div>
 
         </nav>
-
     </header>
 </div>
 

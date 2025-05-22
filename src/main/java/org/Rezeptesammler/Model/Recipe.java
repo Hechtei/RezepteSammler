@@ -152,5 +152,21 @@ public class Recipe {
     public Recipe() {
     }
 
-
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "_id='" + _id + '\'' +
+                ", _rev='" + _rev + '\'' +
+                ", name='" + name + '\'' +
+                ", link='" + link + '\'' +
+                ", caption='" + caption + '\'' +
+                ", thumbnail='" + thumbnail + '\'' +
+                ", category='" + category + '\'' +
+                ", difficulty='" + difficulty + '\'' +
+                ", duration='" + duration + '\'' +
+                ", summary='" + summary + '\'' +
+                ", ingredients=" + ingredients +
+                ", steps=" + steps +
+                '}';
+    }
 }

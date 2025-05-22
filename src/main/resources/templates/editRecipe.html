@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Rezept bearbeiten</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <script src="/main.js"></script>
+</head>
+<body>
+
+<div th:insert="~{fragments/header.html ::header}"></div>
+
+<div class="columns is-fullheight">
+    <div th:insert="~{fragments/menu.html ::menu}"></div>
+
+    <main class="column m-4">
+        <div class="level mb-5">
+            <div class="level-left">
+                <div class="level-item">
+                    <h1 class="title">Rezept bearbeiten</h1>
+                </div>
+            </div>
+            <div class="level-right">
+                <div class="level-item">
+                    <button class="button is-small is-info is-light">
+                        <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+                        <span>Datum</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <form th:action="@{/recipe/update/{id}(id=${recipe._id})}" method="post" th:object="${recipe}">
+            <!-- Verstecktes Feld für die ID -->
+            <input type="hidden" th:field="*{_id}" />
+
+            <!-- Hier: is-align-items-stretch ergänzen -->
+            <div class="columns is-multiline is-align-items-stretch">
+
+                <!-- Box 1: Grunddaten -->
+                <div class="column is-flex is-flex-direction-column">
+                    <div class="box is-flex-grow-1">
+                        <h2 class="subtitle">Grunddaten</h2>
+                        <div class="field">
+                            <label class="label has-text-black">Name</label>
+                            <div class="control">
+                                <input class="input" type="text" th:field="*{name}" required />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label has-text-black">Category</label>
+                            <div class="control">
+                                <input class="input" type="text" th:field="*{category}" required />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Box 2: Zutaten -->
+                <div class="column is-flex is-flex-direction-column">
+                    <div class="box is-flex-grow-1">
+                        <h2 class="subtitle">Zutaten</h2>
+                        <div class="field" id="ingredients-container">
+                            <div class="control" th:each="ingredient, iterStat : *{ingredients}">
+                                <input class="input mb-2" type="text" th:field="*{ingredients[__${iterStat.index}__]}" />
+                            </div>
+                        </div>
+                        <button type="button" class="button is-small is-success mt-2" onclick="addIngredient()">
+                            <span class="icon"><i class="fas fa-plus"></i></span>
+                            <span>Zutat hinzufügen</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Box 3: Schritte -->
+                <div class="column is-flex is-flex-direction-column">
+                    <div class="box is-flex-grow-1">
+                        <h2 class="subtitle">Zubereitungsschritte</h2>
+                        <div class="field" id="steps-container">
+                            <div class="control" th:each="step, iterStat : *{steps}">
+                                <input class="input mb-2" type="text" th:field="*{steps[__${iterStat.index}__]}" />
+                            </div>
+                        </div>
+                        <button type="button" class="button is-small is-success mt-2" onclick="addStep()">
+                            <span class="icon"><i class="fas fa-plus"></i></span>
+                            <span>Schritt hinzufügen</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="column is-12 has-text-right">
+                    <div class="box">
+                        <button type="submit" class="button is-primary is-medium">
+                            <span class="icon"><i class="fas fa-save"></i></span>
+                            <span>Speichern</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </main>
+</div>
+
+<script>
+    function addIngredient() {
+        const container = document.getElementById('ingredients-container');
+        const index = container.children.length;
+        const div = document.createElement('div');
+        div.className = 'control';
+        div.innerHTML = `<input class="input mb-2" type="text" name="ingredients[${index}]" />`;
+        container.appendChild(div);
+    }
+
+    function addStep() {
+        const container = document.getElementById('steps-container');
+        const index = container.children.length;
+        const div = document.createElement('div');
+        div.className = 'control';
+        div.innerHTML = `<input class="input mb-2" type="text" name="steps[${index}]" />`;
+        container.appendChild(div);
+    }
+</script>
+
+</body>
+</html>

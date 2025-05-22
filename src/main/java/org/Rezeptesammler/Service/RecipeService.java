@@ -9,5 +9,7 @@ public interface RecipeService {
 
     public void saveRecipe(Recipe recipe) throws IOException, InterruptedException;
 
+    public boolean delteRecipe(String id);
 
+    public void updateRecipe(Recipe recipe);
 }

@@ -2,7 +2,7 @@
 @use "variables";
 
 aside.aside {
-  height: 100vh;
+  height: 100%;
   width: variables.$aside-width;
   background-color: variables.$grey;
   box-shadow: variables.$aside-box-shadow;

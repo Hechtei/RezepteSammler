@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/png" href="/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="/main.js"></script>
 </head>
@@ -68,31 +69,7 @@
         <div class="box">
             <h2 class="title is-4 mb-4">Zufälliger Rezeptvorschlag</h2>
             <div class="card card recipe-card" th:if="${recipe != null}">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img th:src="@{${recipe.thumbnail}}" alt="Rezeptbild">
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <div class="media">
-                        <div class="media-content">
-                            <p class="title is-4 has-text-white" th:text="${recipe.name}">Spaghetti Carbonara</p>
-                        </div>
-                    </div>
-
-                    <div class="content">
-                        <p th:text="${recipe.summary}">summary</p>
-                        <br>
-                        <span class="tag is-info is-light mt-1" th:text="${recipe.category}">Nicht vegetarisch</span>
-                        <span class="tag is-warning is-light mt-1">Einfach</span>
-                        <span class="tag is-success is-light mt-1">30 Min</span>
-                        <br><br>
-                        <a href="#" class="button is-link is-small mt-2">
-                            <span class="icon"><i class="fas fa-utensils"></i></span>
-                            <span>Zum Rezept</span>
-                        </a>
-                    </div>
-                </div>
+                <div th:insert="~{fragments/recipeCard.html ::recipeCard}"></div>
             </div>
             <div th:if="${recipe == null}">
                 <p>Noch kein Rezept vorhanden</p>

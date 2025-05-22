@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>RecipeCard</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="/main.js"></script>
+</head>
+<body>
+
+<div th:fragment="recipeCard">
+    <div class="card card recipe-card">
+        <div class="card-image">
+            <figure class="image is-4by3">
+                <img th:src="@{${recipe.thumbnail}}" alt="Rezeptbild">
+            </figure>
+        </div>
+        <div class="card-content">
+            <div class="media">
+                <div class="media-content">
+                    <p class="title is-4 has-text-white" th:text="${recipe.name}">Spaghetti Carbonara</p>
+                </div>
+            </div>
+
+            <div class="content">
+                <p th:text="${recipe.summary}">summary</p>
+                <br>
+                <span class="tag is-info is-light mt-1" th:text="${recipe.category}">Nicht vegetarisch</span>
+                <span class="tag is-warning is-light mt-1">Einfach</span>
+                <span class="tag is-success is-light mt-1">30 Min</span>
+                <br><br>
+                <footer class="card-footer">
+                    <a th:href="@{/recipe/{id}(id=${recipe._id})}" class="card-footer-item">Zum Rezept</a>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

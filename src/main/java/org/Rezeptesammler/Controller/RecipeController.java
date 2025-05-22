@@ -2,10 +2,10 @@ package org.Rezeptesammler.Controller;
 
 import org.Rezeptesammler.Model.Recipe;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 
 public interface RecipeController {
@@ -15,4 +15,8 @@ public interface RecipeController {
     @GetMapping("/recipe")
     public String getRecipe(Model model);
 
-}
+    public String postUpdateRecipe(@PathVariable("id") String id, @ModelAttribute Recipe recipe, RedirectAttributes redirectAttributes) throws IllegalAccessException ;
+
+
+
+    }

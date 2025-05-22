@@ -2,15 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Recipe</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
   <script src="/main.js"></script>
 </head>
 <body>
-
-
 
 <div th:insert="~{fragments/header.html ::header }"></div>
 
@@ -35,6 +34,13 @@
       </div>
     </div>
 
+    <div th:if="${error}" class="notification is-danger mt-3 mb-3" style="margin: auto;">
+      <span th:text="${error}"></span>
+    </div>
+    <div th:if="${message}" class="notification is-success mt-3 mb-3" style="margin: auto;">
+      <span th:text="${message}"></span>
+    </div>
+
     <!-- Rezeptname -->
     <h2 class="title is-4" th:text="${recipe.name}">Rezeptname</h2>
 
@@ -43,56 +49,99 @@
       <!-- Thumbnail-Bild -->
       <div class="column is-one-third card-image">
         <div class="box">
-        <figure>
-          <img th:src="@{${recipe.thumbnail}}" alt="Rezeptbild">
-        </figure>
+          <figure>
+            <img th:src="@{${recipe.thumbnail}}" alt="Rezeptbild" />
+          </figure>
         </div>
       </div>
       <!-- Zutaten & Schritte -->
       <div class="column">
-        <div class="columns is-multiline">
+        <div class="columns is-multiline is-align-items-stretch">
           <!-- Zutaten -->
-          <div class="column is-12">
-            <div class="box">
+          <div class="column is-6 is-flex is-flex-direction-column">
+            <div class="box is-flex-grow-1">
               <h3 class="title is-5">🧂 Zutaten</h3>
               <ul>
-                <li th:each="ingredient : ${recipe.ingredients}"
-                    th:text="${ingredient}">Zutat</li>
+                <li class="is-size-5" th:each="ingredient : ${recipe.ingredients}" th:text="${ingredient}">Zutat</li>
               </ul>
             </div>
           </div>
+          <!-- Aktionen -->
+          <div class="column is-6 is-flex is-flex-direction-column">
+            <div class="box p-5 has-text-left is-flex-grow-1">
+              <h3 class="title is-5 mb-4">Aktionen</h3>
+              <div class="buttons mt-4">
+                <a class="button is-info" th:href="@{/recipe/update/{id}(id=${recipe._id})}">
+                  <span class="icon"><i class="fas fa-edit"></i></span>
+                  <span>Bearbeiten</span>
+                </a>
 
-          <!-- Schritte -->
+                <button
+                        class="button is-danger"
+                        th:attr="onclick=|document.getElementById('modal-delete-${recipe._id}').classList.add('is-active')|"
+                >
+                  <span class="icon"><i class="fas fa-trash"></i></span>
+                  <span>Löschen</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
           <!-- Schritte -->
           <div class="column is-12">
             <div class="box p-5 has-text-left">
               <h3 class="title is-5 mb-4">👨‍🍳 Schritte</h3>
               <ol class="content">
-                <li class="mb-3 ml-2 has-text-wrapped" th:each="step : ${recipe.steps}" th:text="${step}">
+                <li
+                        class="is-size-5 mb-3 ml-2 has-text-wrapped"
+                        th:each="step : ${recipe.steps}"
+                        th:text="${step}"
+                >
                   Schritt
                 </li>
-
               </ol>
             </div>
           </div>
-
         </div>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal" th:attr="id='modal-delete-' + ${recipe._id}">
+      <div
+              class="modal-background"
+              th:attr="onclick=|document.getElementById('modal-delete-${recipe._id}').classList.remove('is-active')|"
+      ></div>
+      <div class="modal-card">
+        <header class="modal-card-head has-background-danger">
+          <p class="modal-card-title has-text-black">Rezept löschen</p>
+          <button
+                  class="delete"
+                  aria-label="close"
+                  th:attr="onclick=|document.getElementById('modal-delete-${recipe._id}').classList.remove('is-active')|"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <p>
+            Möchtest du das Rezept <strong th:text="${recipe.name}">Rezept</strong> wirklich
+            löschen?
+          </p>
+        </section>
+        <footer class="modal-card-foot">
+          <form th:action="@{/recipe/delete/{_id}(_id=${recipe._id})}" method="post">
+            <button class="button is-danger" type="submit">Löschen</button>
+          </form>
+          <button
+                  class="button"
+                  th:attr="onclick=|document.getElementById('modal-delete-${recipe._id}').classList.remove('is-active')|"
+          >
+            Abbrechen
+          </button>
+        </footer>
+      </div>
+    </div>
   </main>
-
-
-
-
-
-
-
 </div>
-
-
-
-
-
 
 </body>
 </html>
