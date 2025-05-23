@@ -78,7 +78,70 @@ public class RecipeServiceImpl implements RecipeService {
                     promptTemplate = sb.toString();
                 }
 
-                String prompt = promptTemplate + description;
+                // --- NEU: Audio extrahieren mit ffmpeg ---
+                File mp4File = new File(DOWNLOAD_DIR, baseFilename + ".mp4");
+                File wavFile = new File(DOWNLOAD_DIR, baseFilename + ".wav");
+
+                ProcessBuilder ffmpegPb = new ProcessBuilder(
+                        "ffmpeg", "-i", mp4File.getAbsolutePath(),
+                        "-vn", "-acodec", "pcm_s16le", "-ar", "16000", "-ac", "1",
+                        wavFile.getAbsolutePath()
+                );
+                ffmpegPb.redirectErrorStream(true);
+                Process ffmpegProcess = ffmpegPb.start();
+                try (BufferedReader ffmpegOut = new BufferedReader(new InputStreamReader(ffmpegProcess.getInputStream()))) {
+                    String line;
+                    while ((line = ffmpegOut.readLine()) != null) {
+                        System.out.println("[ffmpeg] " + line);
+                    }
+                }
+                int ffmpegExit = ffmpegProcess.waitFor();
+                if (ffmpegExit != 0) {
+                    System.err.println("❌ ffmpeg Fehler, Exit Code: " + ffmpegExit);
+                    throw new RuntimeException("ffmpeg Fehler beim Audio extrahieren");
+                }
+
+                // --- NEU: Whisper Transkription ---
+                ProcessBuilder whisperPb = new ProcessBuilder(
+                        "whisper",
+                        wavFile.getAbsolutePath(),
+                        "--model", "base",
+                        "--language", "de",
+                        "--output_dir", wavFile.getParent(),
+                        "--output_format", "txt"
+                );
+                whisperPb.redirectErrorStream(true);
+                Process whisperProcess = whisperPb.start();
+                try (BufferedReader whisperOut = new BufferedReader(new InputStreamReader(whisperProcess.getInputStream()))) {
+                    String line;
+                    while ((line = whisperOut.readLine()) != null) {
+                        System.out.println("[whisper] " + line);
+                    }
+                }
+                int whisperExit = whisperProcess.waitFor();
+                if (whisperExit != 0) {
+                    System.err.println("❌ Whisper Fehler, Exit Code: " + whisperExit);
+                    throw new RuntimeException("Whisper Fehler bei Transkription");
+                }
+
+                // Transkript laden
+                File txtFile = new File(DOWNLOAD_DIR, baseFilename + ".txt");
+                StringBuilder transcriptBuilder = new StringBuilder();
+                if (txtFile.exists()) {
+                    try (BufferedReader reader = new BufferedReader(new FileReader(txtFile))) {
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            transcriptBuilder.append(line).append("\n");
+                        }
+                    }
+                }
+                String transcription = transcriptBuilder.toString().trim();
+
+                // Prompt zusammenbauen
+                String prompt = promptTemplate
+                        + "\n\n---\n\n"
+                        + "🔹 Beschreibung aus Video-Metadaten:\n" + description
+                        + "\n\n🔹 Transkription des Videos:\n" + transcription;
 
                 System.out.println("▶ Sende Anfrage an Ollama HTTP API...");
 
@@ -183,7 +246,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public boolean delteRecipe(String id) {
         // Lösche Dateien mit gleicher Basis-ID
-        String[] extensions = {".info.json", ".mp4", ".jpg"};
+        String[] extensions = {".info.json", ".mp4", ".jpg", ".wav", ".txt"};
         for (String ext : extensions) {
             File file = new File(DOWNLOAD_DIR, id + ext);
             if (file.exists()) {

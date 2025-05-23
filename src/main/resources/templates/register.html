@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="/main.js"></script>
+</head>
+<body>
+
+<div th:insert="~{fragments/header.html ::header }"></div>
+
+<div class="columns is-fullheight">
+    <main class="column m-4">
+
+        <div th:if="${error}" class="notification is-danger mt-3" style="max-width: 500px; margin: auto;">
+            <span th:text="${error}"></span>
+        </div>
+        <div th:if="${message}" class="notification is-success mt-3" style="max-width: 500px; margin: auto;">
+            <span th:text="${message}"></span>
+        </div>
+
+        <section class="section">
+            <div class="container">
+                <div class="box" style="max-width: 500px; margin: auto;">
+                    <h1 class="title has-text-centered has-text-black">User Registieren</h1>
+
+                    <form action="/register" method="post" th:object="${user}">
+                        <!-- Username -->
+                        <div class="field">
+                            <label class="label">Benutzername</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="text" th:field="*{username}" placeholder="Benutzername" required>
+                                <span class="icon is-small is-left">
+                             <i class="fas fa-user"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Password -->
+                        <div class="field">
+                            <label class="label">Passwort</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="password" th:field="*{password}" placeholder="Passwort" required>
+                                <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                            </span>
+                            </div>
+                        </div>
+                        <!-- Mail -->
+                        <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control has-icons-left">
+                            <input class="input" type="text" th:field="*{email}" placeholder="E-Mail" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            </div>
+                        </div>
+
+
+                        <!-- Link zur Registrierung -->
+
+                        <!-- Buttons -->
+                        <div class="field is-grouped is-grouped-right">
+                            <p class="control">
+                                <button class="button is-link" type="submit">Registieren</button>
+                            </p>
+                            <p class="control">
+                                <a class="button is-danger" href="/login">Abbrechen</a>
+                            </p>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

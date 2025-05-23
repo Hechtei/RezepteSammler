@@ -21,12 +21,49 @@
             </div>
 
             <div class="navbar-end">
-                <!-- optional content -->
+                <div th:if="${session.user != null}" class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-white is-rounded" data-open="#modal-logout" href="#">
+                    <span class="icon">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </span>
+                            <strong>Abmelden</strong>
+                        </a>
+                    </div>
+
+                    <div class="modal" id="modal-logout">
+                        <div class="modal-background"></div>
+                        <div class="modal-card">
+                            <header class="modal-card-head has-background-primary">
+                                <p class="modal-card-title has-text-black">Wollen Sie Sich abmelden?</p>
+                                <button class="delete" aria-label="close" data-close="#modal-logout"></button>
+                            </header>
+                            <section class="modal-card-body">
+                                <div class="content">
+                                    <form action="/logout" method="post">
+                                        <div class="field">
+                                            <div class="control">
+                                                <button class="button is-white" type="submit">Abmelden</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </section>
+
+                            <footer class="modal-card-foot">
+                                <button class="button is-primary has-text-black" data-close="#modal-logout">Schließen</button>
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </nav>
     </header>
 </div>
+
+
 
 </body>
 </html>

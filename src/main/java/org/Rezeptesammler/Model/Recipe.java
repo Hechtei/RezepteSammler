@@ -38,6 +38,8 @@ public class Recipe {
 
     private List<String> steps;
 
+    private List<User> owners;
+
 
     public Recipe(String _id, String _rev, String name, String link, String caption, String thumbnail, String category, String difficulty, String duration, String summary, List<String> ingredients, List<String> steps) {
         this._id = _id;
