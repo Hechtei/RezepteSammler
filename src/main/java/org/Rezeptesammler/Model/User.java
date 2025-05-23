@@ -16,14 +16,7 @@ public class User {
     private String createdAt;
 
 
-    public User(String id, String _rev, String username, String password, String email, String createdAt) {
-        this.id = id;
-        this._rev = _rev;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.createdAt = createdAt;
-    }
+
 
     public User() {
 

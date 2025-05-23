@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.Rezeptesammler.Model.Recipe;
+import org.Rezeptesammler.Model.User;
 import org.lightcouch.CouchDbClient;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +26,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void saveRecipe(Recipe recipe) throws IOException, InterruptedException {
+    public void saveRecipe(Recipe recipe, User user) throws IOException, InterruptedException {
         File dir = new File(DOWNLOAD_DIR);
         if (!dir.exists()) dir.mkdirs();
 
@@ -237,7 +239,9 @@ public class RecipeServiceImpl implements RecipeService {
         if (thumbnail.exists()) {
             recipe.setThumbnail("/downloads/" + baseFilename + ".jpg");
         }
-
+        ArrayList<User> owners = new ArrayList<>();
+        owners.add(user);
+        recipe.setOwners(owners);
         // Speichern in CouchDB
         dbClient.save(recipe);
         System.out.println("✅ Rezept gespeichert: " + recipe.get_id());

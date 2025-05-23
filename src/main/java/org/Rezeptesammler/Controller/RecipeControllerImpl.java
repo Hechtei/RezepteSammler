@@ -1,6 +1,8 @@
 package org.Rezeptesammler.Controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.Rezeptesammler.Model.Recipe;
+import org.Rezeptesammler.Model.User;
 import org.Rezeptesammler.Service.CouchDBService;
 import org.Rezeptesammler.Service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,14 +70,14 @@ public class RecipeControllerImpl implements RecipeController{
 
     @Override
     @PostMapping("/recipe/save")
-    public String saveRecipe(@RequestParam String name, @RequestParam String link, Model model) {
+    public String saveRecipe(@RequestParam String name, @RequestParam String link, Model model, HttpSession session) {
 
         Recipe recipe = new Recipe();
         recipe.setName(name);
         recipe.setLink(link);
 
         try {
-            recipeService.saveRecipe(recipe);
+            recipeService.saveRecipe(recipe, ((User) session.getAttribute("user")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {

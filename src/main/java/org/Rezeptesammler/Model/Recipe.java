@@ -41,7 +41,7 @@ public class Recipe {
     private List<User> owners;
 
 
-    public Recipe(String _id, String _rev, String name, String link, String caption, String thumbnail, String category, String difficulty, String duration, String summary, List<String> ingredients, List<String> steps) {
+    public Recipe(String _id, String _rev, String name, String link, String caption, String thumbnail, String category, String difficulty, String duration, String summary, List<String> ingredients, List<String> steps, List<User> owners) {
         this._id = _id;
         this._rev = _rev;
         this.name = name;
@@ -54,6 +54,15 @@ public class Recipe {
         this.summary = summary;
         this.ingredients = ingredients;
         this.steps = steps;
+        this.owners = owners;
+    }
+
+    public List<User> getOwners() {
+        return owners;
+    }
+
+    public void setOwners(List<User> owners) {
+        this.owners = owners;
     }
 
     public String getDifficulty() {
