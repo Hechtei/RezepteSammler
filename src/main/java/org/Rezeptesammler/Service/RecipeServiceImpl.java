@@ -86,7 +86,7 @@ public class RecipeServiceImpl implements RecipeService {
 
                 // JSON Request Body für Ollama HTTP API
                 ObjectNode requestJson = objectMapper.createObjectNode();
-                requestJson.put("model", "llama3.2");
+                requestJson.put("model", "gemma:7b-instruct");
                 requestJson.put("stream", false);
 
                 // message

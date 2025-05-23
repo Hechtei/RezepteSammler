@@ -28,8 +28,7 @@
                 <p th:text="${recipe.summary}">summary</p>
                 <br>
                 <span class="tag is-info is-light mt-1" th:text="${recipe.category}">Nicht vegetarisch</span>
-                <span class="tag is-warning is-light mt-1">Einfach</span>
-                <span class="tag is-success is-light mt-1">30 Min</span>
+
                 <br><br>
                 <footer class="card-footer">
                     <a th:href="@{/recipe/{id}(id=${recipe._id})}" class="card-footer-item">Zum Rezept</a>

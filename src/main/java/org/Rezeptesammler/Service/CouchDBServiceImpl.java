@@ -38,6 +38,13 @@ public class CouchDBServiceImpl implements CouchDBService{
         return 0 ;
     }
 
+    public int countVeganRecipes() {
+        List<JsonObject> result = dbClient.view("Recipes/countVeganRecipes").includeDocs(false).query(JsonObject.class);
+        if(!result.isEmpty()) {
+            return result.get(0).get("value").getAsInt();
+        }
+        return 0 ;
+    }
 
 
     @Override

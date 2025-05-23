@@ -12,6 +12,8 @@ public interface CouchDBService {
 
     public int countVegiRecipes();
 
+    public int countVeganRecipes();
+
     public Recipe getRecipeBy_Id(String _id);
 
     public Recipe getRandomRecipe();

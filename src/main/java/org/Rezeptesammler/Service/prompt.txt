@@ -1,8 +1,21 @@
-Extrahiere aus dem folgenden Text ein Rezept mit Zutaten/Gewürze und Schritten.
-Achte dabei bei den Schritten darauf, keine Nummern mitzugeben, aber die Reihenfolge zu beachten
-Darüber hinaus möchte ich die Category ob es Vegetarisch, Fleich oder Vegan ist. Stelle die Category anhand der Zutaten fest.
-Bitte schreibe die Category ganz aus, aber mit einem großem Anfangsbuchstaben.
-Dazu kommt noch eine kurze summary.
-Alles auf Deutsch.
-Gib das Ergebnis als JSON-Objekt zurück. Folgendes Muster bitte beachten:
-{\"summary\": \"...\",\"category\": \"...\",\"ingredients\": [\"...\"], \"steps\": [\"...\"]}.\n\nText:\n"
+Antworte ausschließlich auf Deutsch.
+
+Wenn der folgende Text nicht auf Deutsch ist (z.B. Englisch), übersetze ihn zunächst ins Deutsche, bevor du ihn weiterverarbeitest.
+
+Extrahiere aus dem Text ein Rezept mit:
+- Zutaten (inkl. Mengenangaben und Gewürzen)
+- Zubereitungsschritten (ohne Nummerierung, aber in logischer Reihenfolge)
+
+Bestimme die Kategorie des Rezepts anhand der Zutaten:
+- Fleisch
+- Vegetarisch
+- Vegan
+
+Gib die Kategorie vollständig ausgeschrieben zurück, mit einem Großbuchstaben am Anfang.
+
+Erstelle außerdem eine kurze Zusammenfassung (Summary) des Rezepts.
+
+Gib das Ergebnis als JSON-Objekt im folgenden Format zurück (alle Werte auf Deutsch):
+{"summary": "...", "category": "...", "ingredients": ["..."], "steps": ["..."]}
+
+Text:
